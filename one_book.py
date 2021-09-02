@@ -1,14 +1,12 @@
-from urllib.request import urlopen as uReq
+import requests
 from bs4 import BeautifulSoup as soup
 
-url = "http://books.toscrape.com/catalogue/sharp-objects_997/index.html"
+url = "http://books.toscrape.com/catalogue/blood-defense-samantha-brinkman-1_8/index.html"
 
-uClient = uReq(url)
-page_html = uClient.read()
-uClient.close()
+r = requests.get(url)
 
 # HTML parsing
-page_soup = soup(page_html, "html.parser")
+page_soup = soup(r.content, "html.parser")
 
 # Creates and opens the .csv file
 filename = "one_book.csv"
@@ -18,7 +16,6 @@ f = open(filename, "w")
 headers = "product_code, product_page_url, title, description, category, image_url, number_available, price_excluding_tax, price_including_tax, review_rating \n"
 
 f.write(headers)
-
 
 # Table that contains a bunch of information we need
 table = page_soup.find_all("tr")

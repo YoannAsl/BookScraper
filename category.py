@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as soup
+from urllib.parse import urljoin
 
 category_url = "http://books.toscrape.com/catalogue/category/books/travel_2/index.html"
 base_book_url = "http://books.toscrape.com/catalogue"
@@ -18,34 +19,31 @@ headers = "product_code, product_page_url, title, description, category, image_u
 
 # f.write(headers)
 
+print("une page") if category_soup.find("ul", class_="pager") == None else print("pages")
 
 books = category_soup.find_all("li", class_="col-xs-6")
 
-# for book in books:
-#     book_url = base_book_url + book.a["href"][8:]
+for book in books:
+    book_url = urljoin(category_url, book.a["href"])
 
-#     book_html = requests.get(book_url)
-#     book_soup = soup(book_html.content, "html.parser")
+    book_html = requests.get(book_url)
+    book_soup = soup(book_html.content, "html.parser")
 
-#     # Table that contains a bunch of information we need
-#     table = book_soup.find_all("tr")
+    # Table that contains a bunch of information we need
+    table = book_soup.find_all("tr")
 
-#     product_code = table[0].td.text
-#     price_excluding_tax = table[2].td.text
-#     price_including_tax = table[3].td.text
-#     number_available = table[5].td.text
+    product_code = table[0].td.text
+    price_excluding_tax = table[2].td.text
+    price_including_tax = table[3].td.text
+    number_available = table[5].td.text
 
-#     title = book_soup.h1.text
-#     description = book_soup.find_all("p")[3].text
-#     review_rating = book_soup.find("p", class_="star-rating")["class"][1]
-#     category = book_soup.find_all("a")[3].text
+    title = book_soup.h1.text
+    description = book_soup.find_all("p")[3].text
+    review_rating = book_soup.find("p", class_="star-rating")["class"][1]
+    category = book_soup.find_all("a")[3].text
 
-#     scraped_url = book_soup.img["src"]
-#     image_url = "http://books.toscrape.com/" + scraped_url[6:]
-
+    image_url = urljoin(book_url, book_soup.img["src"])
 #     f.write(
 #         f'{product_code},{book_url},{title.replace(",", "|")},{description.replace(",", "|")},{category},{image_url},{number_available},{price_excluding_tax},{price_including_tax},{review_rating} \n'
 #     )
 # f.close()
-
-print("une page") if category_soup.find("ul", class_="pager") == None else print("pages")

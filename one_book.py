@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as soup
+from urllib.parse import urljoin
 
 url = "http://books.toscrape.com/catalogue/blood-defense-samantha-brinkman-1_8/index.html"
 
@@ -30,8 +31,7 @@ description = page_soup.find_all("p")[3].text
 review_rating = page_soup.find("p", {"class": "star-rating"})["class"][1]
 category = page_soup.find_all("a")[3].text
 
-scraped_url = page_soup.img["src"]
-image_url = "http://books.toscrape.com/" + scraped_url[6:]
+image_url = urljoin(url, page_soup.img["src"])
 
 f.write(
     f'{product_code},{url},{title.replace(",", "|")},{description.replace(",", "|")},{category},{image_url},{number_available},{price_excluding_tax},{price_including_tax},{review_rating} \n'

@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup as soup
 from urllib.parse import urljoin
 
 url = "http://books.toscrape.com/catalogue/category/books/mystery_3/index.html"
-base_book_url = "http://books.toscrape.com/catalogue"
 
 # Creates and opens the .csv file
 filename = "category.csv"

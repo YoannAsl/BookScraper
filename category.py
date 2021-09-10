@@ -55,6 +55,3 @@ def main():
         else:
             f.close()
             break
-
-
-main()

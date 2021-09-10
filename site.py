@@ -1,4 +1,5 @@
 import requests
+import os
 from bs4 import BeautifulSoup as soup
 from urllib.parse import urljoin
 
@@ -49,7 +50,7 @@ def main():
                 review_rating = book_soup.find("p", class_="star-rating")["class"][1]
 
                 image_url = urljoin(book_url, book_soup.img["src"])
-
+                download_image(image_url, title, "images")
                 f.write(
                     f'{product_code},{book_url},{title.replace(",", "|")},{description.replace(",", "|")},{image_url},{number_available},{price_excluding_tax},{price_including_tax},{review_rating} \n'
                 )
@@ -61,6 +62,19 @@ def main():
             else:
                 f.close()
                 break
+
+
+def download_image(url: str, name: str, path: str):
+    if not os.path.isdir(path):
+        os.makedirs(path)
+    response = requests.get(url)
+    image_name = f"{path}/{name.replace(' ','_').replace(':','')}.jpg"
+
+    b = open(image_name, "wb")
+    b.write(response.content)
+
+    print(image_name)
+    print(url)
 
 
 main()

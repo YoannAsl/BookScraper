@@ -2,7 +2,6 @@ import requests
 import os
 from bs4 import BeautifulSoup as soup
 from urllib.parse import urljoin
-
 BASE_URL = "http://books.toscrape.com/index.html"
 url = "http://books.toscrape.com/index.html"
 
